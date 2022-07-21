@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <canvas id="canvas" width="330px">
+
+    </canvas>
+    <script>
+        var last
+        var flag = false
+        const canvas = document.getElementById('canvas')
+        canvas.width = document.documentElement.clientWidth
+        canvas.height = document.documentElement.clientHeight
+
+        const ctx = canvas.getContext('2d')
+        ctx.fillStyle = 'black'
+        ctx.strokeStyle = 'blue'
+        ctx.lineWidth = 20
+        ctx.lineCap = 'round'
+
+        if ('ontouchstart' in window) {
+            canvas.ontouchstart = (e) => {
+                console.log('touchStart')
+                console.log(e)
+                last = [e.touches[0].clientX, e.touches[0].clientY]
+            }
+            canvas.ontouchmove = (e) => {
+                var x = e.touches[0].clientX
+                var y = e.touches[0].clientY
+                drawLine(last[0], last[1], x, y)
+                last = [x, y]
+            }
+        } else {
+            canvas.onmousedown = (e) => {
+                last = [e.clientX, e.clientY]
+                flag = true
+            }
+            canvas.onmousemove = (e) => {
+                if (flag) {
+                    var x = e.clientX
+                    var y = e.clientY
+                    drawLine(last[0], last[1], x, y)
+                    last = [x, y]
+                }
+
+            }
+            canvas.onmouseup = (e) => {
+                flag = false
+            }
+        }
+
+
+        function drawLine(x1, y1, x2, y2) {
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+        }
+    </script>
+</body>
+
+</html>
